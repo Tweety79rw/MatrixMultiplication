@@ -21,23 +21,42 @@ namespace MatrixMultiplication
         public static Matrix operator * (Matrix a, Matrix b)
         {
             List<List<int>> aMatrix = a.getMatrix();
-            List<List<int>> bMatrix = b.getMatrix();
+            //List<List<int>> bMatrix = b.getMatrix();
+            List<List<int>> bMatrix = b.getTransposeMatrix();
             List<List<int>> resultMatrix = new List<List<int>>();
+            //for (int row = 0; row < aMatrix.Count; row++)
+            //{ 
+            //    List<int> tempMatrix = new List<int>();
+            //    for (int col = 0; col < bMatrix[0].Count; col++)
+            //    {
+            //        int tempInt = 0;
+            //        for (int inner = 0; inner < aMatrix[0].Count; inner++)
+            //        {
+            //            tempInt += (aMatrix[row][inner] * bMatrix[inner][col]);
+            //        }
+            //        tempMatrix.Add(tempInt);
+            //    }
+            //        resultMatrix.Add(tempMatrix);
+            //}
             for (int row = 0; row < aMatrix.Count; row++)
-            { 
+            {
                 List<int> tempMatrix = new List<int>();
-                for (int col = 0; col < bMatrix[0].Count; col++)
+                for (int col = 0; col < bMatrix.Count; col++)
                 {
-                    int tempInt = 0;
-                    for (int inner = 0; inner < aMatrix[0].Count; inner++)
-                    {
-                        tempInt += (aMatrix[row][inner] * bMatrix[inner][col]);
-                    }
-                    tempMatrix.Add(tempInt);
+                    tempMatrix.Add(dotProduct(aMatrix[row],bMatrix[col]));
                 }
-                    resultMatrix.Add(tempMatrix);
+                resultMatrix.Add(tempMatrix);
             }
-            return new Matrix(resultMatrix);
+                return new Matrix(resultMatrix);
+        }
+        private static int dotProduct(List<int> a, List<int> b)
+        {
+            int result = 0;
+            for (int i = 0; i < a.Count; i++)
+            {
+                result += a[i] * b[i];
+            }
+            return result;
         }
         public void scalarMultiply(int scalar){
             for(int row = 0;row<this.matrix.Count;row++){
@@ -63,6 +82,18 @@ namespace MatrixMultiplication
                 resultMatrix.Add(tempMatrix);
             }
             return new Matrix(resultMatrix);
+        }
+        public List<List<int>> getTransposeMatrix()
+        {
+            List<List<int>> results = new List<List<int>>();
+            for(int row= 0;row<this.matrix[0].Count;row++){
+                List<int> temp = new List<int>();
+                for(int col=0;col<this.matrix.Count;col++){
+                    temp.Add(matrix[col][row]);
+                }
+                results.Add(temp);
+            }
+            return results;
         }
 
         public List<List<int>> getMatrix() { return matrix; }
